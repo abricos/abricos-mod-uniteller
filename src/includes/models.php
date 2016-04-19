@@ -7,6 +7,7 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
+/*
 class UnitellerRequest extends AbricosModel {
     protected $_structModule = 'uniteller';
     protected $_structName = 'Request';
@@ -14,6 +15,7 @@ class UnitellerRequest extends AbricosModel {
 
 class UnitellerRequestList extends AbricosModelList {
 }
+/**/
 
 /**
  * Class UnitellerConfig

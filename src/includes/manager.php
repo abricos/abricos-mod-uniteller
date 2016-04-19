@@ -31,7 +31,7 @@ class UnitellerManager extends Ab_ModuleManager {
     }
 
     public function GetApp(){
-        $this->GetApp('payments');
+        Abricos::GetApp('payments');
         return parent::GetApp();
     }
 

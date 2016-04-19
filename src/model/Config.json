@@ -6,6 +6,13 @@
       "rolefn": "IsAdminRole",
       "type": "string"
     },
+    "urlPay": {
+      "type": "string"
+    },
+    "urlResult": {
+      "rolefn": "IsAdminRole",
+      "type": "string"
+    },
     "shopid": {
       "type": "string"
     }

@@ -16,14 +16,12 @@ class UnitellerApp extends Payments {
 
     protected function GetClasses(){
         return array(
-            'Request' => 'UnitellerRequest',
-            'RequestList' => 'UnitellerRequestList',
             'Config' => 'UnitellerConfig'
         );
     }
 
     protected function GetStructures(){
-        return 'Request,Config';
+        return 'Config';
     }
 
     public function ResponseToJSON($d){
@@ -124,9 +122,11 @@ class UnitellerApp extends Payments {
         }
 
         $utmf = Abricos::TextParser(true);
+        $d->urlPay = $utmf->Parser($d->urlPay);
         $d->shopid = $utmf->Parser($d->shopid);
 
         $phs = Abricos::GetModule('uniteller')->GetPhrases();
+        $phs->Set("urlPay", $d->urlPay);
         $phs->Set("shopid", $d->shopid);
 
         Abricos::$phrases->Save();
