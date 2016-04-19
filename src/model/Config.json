@@ -1,10 +1,13 @@
 {
   "version": "0.1.0",
   "type": "model",
-  "rolefn": "IsAdminRole",
   "fields": {
-    "page_count": {
-      "type": "int"
+    "login": {
+      "rolefn": "IsAdminRole",
+      "type": "string"
+    },
+    "shopid": {
+      "type": "string"
     }
   }
 }

@@ -35,27 +35,17 @@ Component.entryPoint = function(NS){
         onSubmitFormAction: function(){
             this.set('waiting', true);
 
-            var model = this.get('model'),
-                instance = this;
+            var model = this.get('model');
 
             this.get('appInstance').configSave(model, function(err, result){
-                instance.set('waiting', false);
-                if (!err){
-                    // instance.fire('editorSaved');
-                }
-            });
+                this.set('waiting', false);
+            }, this);
         },
     }, {
         ATTRS: {
-            component: {
-                value: COMPONENT
-            },
-            templateBlockName: {
-                value: 'widget'
-            },
-            config: {
-                value: null
-            }
+            component: {value: COMPONENT},
+            templateBlockName: {value: 'widget'},
+            config: {value: null}
         }
     });
 

@@ -15,6 +15,11 @@ class UnitellerRequest extends AbricosModel {
 class UnitellerRequestList extends AbricosModelList {
 }
 
+/**
+ * Class UnitellerConfig
+ *
+ * @property string $shopid Идентификатор точки продажи Shop_ID
+ */
 class UnitellerConfig extends AbricosModel {
     protected $_structModule = 'uniteller';
     protected $_structName = 'Config';

@@ -12,7 +12,7 @@
  *
  * @property UnitellerManager $manager
  */
-class UnitellerApp extends AbricosApplication {
+class UnitellerApp extends Payments {
 
     protected function GetClasses(){
         return array(
@@ -99,7 +99,7 @@ class UnitellerApp extends AbricosApplication {
         }
 
         if (!$this->manager->IsViewRole()){
-            return 403;
+            return AbricosResponse::ERR_FORBIDDEN;
         }
 
         $phrases = Abricos::GetModule('uniteller')->GetPhrases();
@@ -110,29 +110,24 @@ class UnitellerApp extends AbricosApplication {
             $d[$ph->id] = $ph->value;
         }
 
-        if (!isset($d['page_count'])){
-            $d['page_count'] = 20;
-        }
-
-        return $this->_cache['Config'] = $this->models->InstanceClass('Config', $d);
+        return $this->_cache['Config'] = $this->InstanceClass('Config', $d);
     }
 
-    public function ConfigSaveToJSON($sd){
-        $this->ConfigSave($sd);
+    public function ConfigSaveToJSON($d){
+        $this->ConfigSave($d);
         return $this->ConfigToJSON();
     }
 
-    public function ConfigSave($sd){
+    public function ConfigSave($d){
         if (!$this->manager->IsAdminRole()){
-            return 403;
+            return AbricosResponse::ERR_FORBIDDEN;
         }
 
-        /** @var UnitellerModule $module */
+        $utmf = Abricos::TextParser(true);
+        $d->shopid = $utmf->Parser($d->shopid);
 
         $phs = Abricos::GetModule('uniteller')->GetPhrases();
-        /*
-        $phs->Set("page_count", intval($sd->page_count));
-        /**/
+        $phs->Set("shopid", $d->shopid);
 
         Abricos::$phrases->Save();
     }

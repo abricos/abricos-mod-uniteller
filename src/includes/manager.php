@@ -30,6 +30,11 @@ class UnitellerManager extends Ab_ModuleManager {
         return $this->IsRoleEnable(UnitellerAction::VIEW);
     }
 
+    public function GetApp(){
+        $this->GetApp('payments');
+        return parent::GetApp();
+    }
+
     public function AJAX($d) {
         return $this->GetApp()->AJAX($d);
     }
