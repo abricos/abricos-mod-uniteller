@@ -32,6 +32,21 @@ Component.entryPoint = function(NS){
             var config = this.get('config');
             this.set('model', config);
         },
+        showMoreHelpBlock: function(e){
+            var node = e.defineTarget,
+                nodeHelpBlock = node.ancestor('.help-block'),
+                nodeMoreLink = node.ancestor('.help-block-more-link');
+            if (!nodeHelpBlock || !nodeMoreLink){
+                return;
+            }
+            var nodeMoreText = nodeHelpBlock.one('.help-block-more-text');
+            if (!nodeMoreText){
+                return;
+            }
+
+            nodeMoreLink.addClass('hide');
+            nodeMoreText.removeClass('hide');
+        },
         onSubmitFormAction: function(){
             this.set('waiting', true);
 
@@ -46,6 +61,9 @@ Component.entryPoint = function(NS){
             component: {value: COMPONENT},
             templateBlockName: {value: 'widget'},
             config: {value: null}
+        },
+        CLICKS: {
+            showMore: 'showMoreHelpBlock'
         }
     });
 

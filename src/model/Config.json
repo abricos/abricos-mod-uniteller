@@ -15,6 +15,9 @@
     },
     "shopid": {
       "type": "string"
+    },
+    "lifetime": {
+      "type": "int"
     }
   }
 }

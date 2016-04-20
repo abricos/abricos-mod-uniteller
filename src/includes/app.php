@@ -123,10 +123,12 @@ class UnitellerApp extends Payments {
 
         $utmf = Abricos::TextParser(true);
         $d->urlPay = $utmf->Parser($d->urlPay);
+        $d->urlResult = $utmf->Parser($d->urlResult);
         $d->shopid = $utmf->Parser($d->shopid);
 
         $phs = Abricos::GetModule('uniteller')->GetPhrases();
         $phs->Set("urlPay", $d->urlPay);
+        $phs->Set("urlResult", $d->urlResult);
         $phs->Set("shopid", $d->shopid);
 
         Abricos::$phrases->Save();

@@ -37,9 +37,66 @@
             <div class="form-group">
                 <label>Идентификатор точки продажи (Shop_ID)</label>
                 <input name="shopid" type="text" class="form-control" data-wait="disable">
+
+                <div class="help-block">
+                    <p>
+                        Идентификатор точки продажи в системе Uniteller.
+                        <span class="help-block-more-link">
+                            <a href="#" data-click="showMore">подробнее...</a>
+                        </span>
+                    </p>
+                    <div class="help-block-more-text hide">
+                        <uL>
+                            <li>
+                                В Личном кабинете «боевой» среды этот параметр называется
+                                <b>Uniteller Point ID</b> и его значение доступно на странице «<b>Точки
+                                продажи компании</b>» (пункт меню «<b>Точки продажи</b>») в столбце
+                                <b>Uniteller Point ID</b>.
+                            </li>
+                            <li>
+                                В Личном кабинете «тестовой» среды этот параметр называется
+                                <b>Shop_ID</b> и его значение доступно на странице «<b>Договоры</b>» в
+                                столбце «<b>Договор</b>».
+                            </li>
+                        </uL>
+                        <p>
+                            Формат: текст, содержащий либо латинские буквы и цифры в количестве
+                            от 1 до 64, либо две группы латинских букв и цифр, разделенных «-»
+                            (первая группа от 1 до 15 символов, вторая группа от 1 до 11 символов),
+                            к регистру нечувствителен
+                        </p>
+                    </div>
+                </div>
             </div>
 
-            <hr />
+            <div class="form-group">
+                <label>Параметр Lifetime</label>
+                <input name="lifetime" type="text" class="form-control" data-wait="disable">
+
+                <div class="help-block">
+                    <p>
+                        Время жизни формы оплаты в секундах, начиная с момента её показа.
+                        <span class="help-block-more-link">
+                            <a href="#" data-click="showMore">подробнее...</a>
+                        </span>
+                    </p>
+                    <div class="help-block-more-text hide">
+                        <p>
+                            Должно быть целым положительным числом. Если Покупатель
+                            использует форму дольше указанного времени, то форма оплаты будет
+                            считаться устаревшей, и платёж не будет принят. Покупателю в этом
+                            случае будет предложено вернуться на сайт Мерчанта для повторного
+                            выполнения заказа.
+                        </p>
+                        <p>
+                            Значение параметра рекомендуется устанавливать не более 300 сек.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <hr/>
 
             <div class="text-right">
                 <span data-wait="show">

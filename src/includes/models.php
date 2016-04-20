@@ -7,20 +7,14 @@
  * @author Alexander Kuzmin <roosit@abricos.org>
  */
 
-/*
-class UnitellerRequest extends AbricosModel {
-    protected $_structModule = 'uniteller';
-    protected $_structName = 'Request';
-}
-
-class UnitellerRequestList extends AbricosModelList {
-}
-/**/
 
 /**
  * Class UnitellerConfig
  *
+ * @property string $urlPay
+ * @property string $urlResult
  * @property string $shopid Идентификатор точки продажи Shop_ID
+ * @property int $lifetime
  */
 class UnitellerConfig extends AbricosModel {
     protected $_structModule = 'uniteller';
