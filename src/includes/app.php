@@ -12,7 +12,7 @@
  *
  * @property UnitellerManager $manager
  */
-class UnitellerApp extends Payments {
+class UnitellerApp extends PaymentsEngine {
 
     protected function GetClasses(){
         return array(
@@ -35,52 +35,31 @@ class UnitellerApp extends Payments {
         return null;
     }
 
-    public function RequestSendToJSON($d){
-        $ret = $this->RequestSend($d);
-        return $this->ResultToJSON('requestSend', $ret);
-    }
+    public function FormFill(PaymentsForm $form){
+        $config = $this->Config();
 
-    public function RequestSend($d){
-        if (!$this->manager->IsViewRole()){
-            return 403;
+        $form->url = $config->urlPay;
+
+        $p = new stdClass();
+        $p->Shop_IDP = strval($config->shopid);
+        $p->Order_IDP = $form->order->id;
+
+        $p->Subtotal_P = sprintf('%.2f', $form->order->total);
+
+        $p->Lifetime = intval($config->lifetime);
+        if ($p->Lifetime){
+            $lifetime = $p->Lifetime;
+        } else {
+            unset($p->Lifetime);
+            $lifetime = '';
         }
 
-        $utmf = Abricos::TextParser(true);
+        $p->URL_RETURN_OK = $form->urlReturnOk;
+        $p->URL_RETURN_NO = $form->urlReturnNo;
 
-        $d->requestType = intval($d->requestType);
-        $d->formType = intval($d->formType);
-        $d->email = $utmf->Parser($d->email);
-        if (is_object($d->arguments)){
-            $d->arguments = json_encode($d->arguments);
-        }else{
-            return 500;
-        }
+        $p->Signature = strtoupper(md5($p->Shop_IDP.$p->Order_IDP.$p->Subtotal_P.$lifetime.$config->password));
 
-        UnitellerQuery::RequestAppend($this->db, $d);
-
-        $ret = new stdClass();
-        $ret->success = true;
-        return $ret;
-    }
-
-    public function RequestListToJSON(){
-        $ret = $this->RequestList();
-        return $this->ResultToJSON('requestList', $ret);
-    }
-
-    public function RequestList(){
-        if (!$this->manager->IsAdminRole()){
-            return 403;
-        }
-
-        /** @var RequestList $list */
-        $list = $this->models->InstanceClass('RequestList');
-
-        $rows = UnitellerQuery::RequestList($this->db);
-        while (($d = $this->db->fetch_array($rows))){
-            $list->Add($this->models->InstanceClass('Request', $d));
-        }
-        return $list;
+        $form->params = $p;
     }
 
     public function ConfigToJSON(){
@@ -108,6 +87,19 @@ class UnitellerApp extends Payments {
             $d[$ph->id] = $ph->value;
         }
 
+        if (!isset($d['urlPay'])){
+            $d['urlPay'] = "https://test.wpay.uniteller.ru/pay/";
+        }
+
+        if (!isset($d['urlResult'])){
+            $d['urlResult'] = "https://test.wpay.uniteller.ru/results/";
+        }
+
+        if (!isset($d['lifetime'])){
+            $d['lifetime'] = "3600";
+        }
+
+
         return $this->_cache['Config'] = $this->InstanceClass('Config', $d);
     }
 
@@ -122,14 +114,13 @@ class UnitellerApp extends Payments {
         }
 
         $utmf = Abricos::TextParser(true);
-        $d->urlPay = $utmf->Parser($d->urlPay);
-        $d->urlResult = $utmf->Parser($d->urlResult);
-        $d->shopid = $utmf->Parser($d->shopid);
 
         $phs = Abricos::GetModule('uniteller')->GetPhrases();
-        $phs->Set("urlPay", $d->urlPay);
-        $phs->Set("urlResult", $d->urlResult);
-        $phs->Set("shopid", $d->shopid);
+        $phs->Set("password", $utmf->Parser($d->password));
+        $phs->Set("urlPay", $utmf->Parser($d->urlPay));
+        $phs->Set("urlResult", $utmf->Parser($d->urlResult));
+        $phs->Set("shopid", $utmf->Parser($d->shopid));
+        $phs->Set("lifetime", intval($d->lifetime));
 
         Abricos::$phrases->Save();
     }

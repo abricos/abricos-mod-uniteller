@@ -11,6 +11,7 @@
 /**
  * Class UnitellerConfig
  *
+ * @property string $password
  * @property string $urlPay
  * @property string $urlResult
  * @property string $shopid Идентификатор точки продажи Shop_ID
