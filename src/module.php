@@ -15,7 +15,6 @@ class UnitellerModule extends Ab_Module {
     public function __construct(){
         $this->version = "0.1.0";
         $this->name = "uniteller";
-        // $this->takelink = "uniteller";
 
         $this->permission = new UnitellerPermission($this);
     }

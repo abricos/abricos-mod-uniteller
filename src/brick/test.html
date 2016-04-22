@@ -1,0 +1,93 @@
+<!--[*]
+
+[script]content/test.php[/script]
+
+[*]-->
+<div class="aw-uniteller">
+    <h3>Система Uniteller</h3>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">Изменение статуса заказа</h3>
+        </div>
+        <div class="panel-body">
+
+            <form action="/payments/api/uniteller/" method="POST">
+
+                <p>
+                    Все поля в этой форме заполняются автоматически. Для этого необходимо
+                    открыть эту страницу по формату:
+                    <i>http://mydomain.tld/payments/test/uniteller/[ORDERID]/[STATUS]/</i>.
+                    <br />
+                    Например: <i>http://abricos.local/payments/test/uniteller/fddfc109a420516bb93bf22c6104343c/paid/</i>
+                </p>
+
+                <p>
+                    POST-форма для проверки запроса платежной системы на изменение статуса заказа.
+                </p>
+                <p>
+                    В настройках магазина системы Uniteller в поле "URL для уведомление сервера
+                    интернет-магазина об изменившемся статусе счёта/оплаты" необходимо указать
+                    значение по формату:
+                    <strong><i>http://mydomain.tld</i>/payments/api/uniteller/</strong>
+                </p>
+
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Идентификатор заказа (Order_IDP)</label>
+                        <div class="col-sm-8">
+                            <input name="Order_IDP" value="{v#orderid}" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Статус (Status)</label>
+                        <div class="col-sm-8">
+                            <select id="{v#brickid}-status" name="Status" class="form-control">
+                                <option value="not">not</option>
+                                <option value="authorized">authorized</option>
+                                <option value="not_authorized">not_authorized</option>
+                                <option value="paid">paid</option>
+                                <option value="canceled">canceled</option>
+                                <option value="waiting">waiting</option>
+                            </select>
+
+                            <script>
+                                var el = document.getElementById('{v#brickid}-status');
+                                el.value = '{v#status}';
+                            </script>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">Ключ проверки (Signature)</label>
+                        <div class="col-sm-8">
+                            <input name="Signature" value="{v#signature}" type="text" class="form-control">
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="text-right">
+                        <input type="submit" value="Изменить статус" class="btn btn-default">
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<input
+        type="hidden" name="Shop_IDP" value="4289912887-4422"><input type="hidden" name="Order_IDP"
+                                                                     value="575f6e755157dde236d88c2e8e73db44"><input
+        type="hidden" name="Subtotal_P" value="250.00"><input type="hidden" name="Lifetime" value="3600"><input
+        type="hidden" name="URL_RETURN_OK"
+        value="http://kadplan.local/payments/pay/ok/575f6e755157dde236d88c2e8e73db44/"><input type="hidden"
+                                                                                              name="URL_RETURN_NO"
+                                                                                              value="http://kadplan.local/payments/pay/no/575f6e755157dde236d88c2e8e73db44/">
+<input
+        type="hidden" name="Signature" value="8409331BC55BAAB2FF1E01DB91925E2F">
+</form>
