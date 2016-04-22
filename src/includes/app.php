@@ -65,10 +65,27 @@ class UnitellerApp extends PaymentsEngine {
     public function OrderStatusByPOST(){
         $orderid = Abricos::CleanGPC('p', 'Order_ID', TYPE_STR);
         $status = Abricos::CleanGPC('p', 'Status', TYPE_STR);
-        $signature = Abricos::CleanGPC('p', 'Signature', TYPE_STR);
+        $pSignature = Abricos::CleanGPC('p', 'Signature', TYPE_STR);
 
+        /** @var PaymentsApp $paymentsApp */
+        $paymentsApp = Abricos::GetApp('payments');
+        $order = $paymentsApp->Order($orderid);
 
+        if (AbricosResponse::IsError($order)){
+            return AbricosResponse::ERR_NOT_FOUND;
+        }
 
+        $config = $this->Config();
+
+        $signature = strtoupper(md5($orderid.$status.$config->password));
+
+        if ($pSignature !== $signature){
+            return AbricosResponse::ERR_BAD_REQUEST;
+        }
+
+        $order->status = $status;
+
+        return $order;
     }
 
     public function ConfigToJSON(){
