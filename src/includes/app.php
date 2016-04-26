@@ -62,7 +62,16 @@ class UnitellerApp extends PaymentsEngine {
         $form->params = $p;
     }
 
-    public function OrderStatusByPOST(){
+    public function API($action, $p1, $p2, $p3){
+        switch ($action){
+            case strtolower("orderStatusUpdate"):
+                return $this->OrderStatusUpdateByPOST();
+        }
+
+        return AbricosResponse::ERR_BAD_REQUEST;
+    }
+
+    public function OrderStatusUpdateByPOST(){
         $orderid = Abricos::CleanGPC('p', 'Order_ID', TYPE_STR);
         $status = Abricos::CleanGPC('p', 'Status', TYPE_STR);
         $pSignature = Abricos::CleanGPC('p', 'Signature', TYPE_STR);
@@ -84,6 +93,8 @@ class UnitellerApp extends PaymentsEngine {
         }
 
         $order->status = $status;
+
+        $paymentsApp->OrderStatusUpdateMethod($order);
 
         return $order;
     }
