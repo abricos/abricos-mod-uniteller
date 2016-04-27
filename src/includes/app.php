@@ -72,29 +72,46 @@ class UnitellerApp extends PaymentsEngine {
     }
 
     public function OrderStatusUpdateByPOST(){
-        $orderid = Abricos::CleanGPC('p', 'Order_ID', TYPE_STR);
-        $status = Abricos::CleanGPC('p', 'Status', TYPE_STR);
+        $pOrder_ID = Abricos::CleanGPC('p', 'Order_ID', TYPE_STR);
+        $pStatus = Abricos::CleanGPC('p', 'Status', TYPE_STR);
         $pSignature = Abricos::CleanGPC('p', 'Signature', TYPE_STR);
+
+        $logDebugInfo = array(
+            'Order_ID' => $pOrder_ID,
+            'Status' => $pStatus,
+            'Signature' => $pSignature,
+        );
+
+        $this->LogDebug('Request payment service to change the order status', $logDebugInfo);
 
         /** @var PaymentsApp $paymentsApp */
         $paymentsApp = Abricos::GetApp('payments');
-        $order = $paymentsApp->Order($orderid);
+        $order = $paymentsApp->Order($pOrder_ID);
 
         if (AbricosResponse::IsError($order)){
+            $this->LogError('Order not found to change the status', array(
+                'orderid' => $pOrder_ID
+            ));
+
             return AbricosResponse::ERR_NOT_FOUND;
         }
 
         $config = $this->Config();
 
-        $signature = strtoupper(md5($orderid.$status.$config->password));
+        $password = $config->password;
+
+        $signature = strtoupper(md5($pOrder_ID.$pStatus.$password));
 
         if ($pSignature !== $signature){
+            $this->LogError('Invalid signature order to change the status', $logDebugInfo);
             return AbricosResponse::ERR_BAD_REQUEST;
         }
 
-        $order->status = $status;
+        $order->status = $pStatus;
 
         $paymentsApp->OrderStatusUpdateMethod($order);
+
+        $this->LogTrace('End order status update', $logDebugInfo);
 
         return $order;
     }
@@ -136,8 +153,18 @@ class UnitellerApp extends PaymentsEngine {
             $d['lifetime'] = "3600";
         }
 
+        /** @var UnitellerConfig $config */
+        $config = $this->InstanceClass('Config', $d);
 
-        return $this->_cache['Config'] = $this->InstanceClass('Config', $d);
+        if (empty($config->password)){
+            $this->LogWarn('Password not set in Config');
+        }
+
+        if (empty($config->shopid)){
+            $this->LogWarn('Shop ID not set in Config');
+        }
+
+        return $this->_cache['Config'] = $config;
     }
 
     public function ConfigSaveToJSON($d){
