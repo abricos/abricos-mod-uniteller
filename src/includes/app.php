@@ -107,9 +107,7 @@ class UnitellerApp extends PaymentsEngine {
             return AbricosResponse::ERR_BAD_REQUEST;
         }
 
-        $order->status = $pStatus;
-
-        $paymentsApp->OrderStatusUpdateMethod($order);
+        $paymentsApp->OrderStatusUpdateMethod($order, $pStatus);
 
         $this->LogTrace('End order status update', $logDebugInfo);
 
