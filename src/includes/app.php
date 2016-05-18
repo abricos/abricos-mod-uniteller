@@ -47,7 +47,7 @@ class UnitellerApp extends PaymentsEngine {
         $p->Subtotal_P = sprintf('%.2f', $form->order->total);
 
         $p->Lifetime = intval($config->lifetime);
-        if ($p->Lifetime){
+        if ($p->Lifetime > 0){
             $lifetime = $p->Lifetime;
         } else {
             unset($p->Lifetime);
@@ -57,7 +57,26 @@ class UnitellerApp extends PaymentsEngine {
         $p->URL_RETURN_OK = $form->urlReturnOk;
         $p->URL_RETURN_NO = $form->urlReturnNo;
 
-        $p->Signature = strtoupper(md5($p->Shop_IDP.$p->Order_IDP.$p->Subtotal_P.$lifetime.$config->password));
+        $Customer_IDP = "";
+        $Card_IDP = "";
+        $IData = '';
+        $PT_Code = '';
+        $MeanType = "";
+        $EMoneyType = "";
+
+        $p->Signature = strtoupper(md5(
+            md5($p->Shop_IDP)."&".
+            md5($p->Order_IDP)."&".
+            md5($p->Subtotal_P)."&".
+            md5($MeanType)."&".
+            md5($EMoneyType)."&".
+            md5($lifetime)."&".
+            md5($Customer_IDP)."&".
+            md5($Card_IDP)."&".
+            md5($IData)."&".
+            md5($PT_Code)."&".
+            md5($config->password)
+        ));
 
         $form->params = $p;
     }
@@ -140,11 +159,11 @@ class UnitellerApp extends PaymentsEngine {
         }
 
         if (!isset($d['urlPay'])){
-            $d['urlPay'] = "https://test.wpay.uniteller.ru/pay/";
+            $d['urlPay'] = "https://wpay.uniteller.ru/pay/";
         }
 
         if (!isset($d['urlResult'])){
-            $d['urlResult'] = "https://test.wpay.uniteller.ru/results/";
+            $d['urlResult'] = "https://wpay.uniteller.ru/results/";
         }
 
         if (!isset($d['lifetime'])){
