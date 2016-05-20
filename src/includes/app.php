@@ -205,7 +205,4 @@ class UnitellerApp extends PaymentsEngine {
 
         Abricos::$phrases->Save();
     }
-
 }
-
-?>

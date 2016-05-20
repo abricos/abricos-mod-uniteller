@@ -55,5 +55,3 @@ class UnitellerManager extends Ab_ModuleManager {
         );
     }
 }
-
-?>

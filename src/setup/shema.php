@@ -15,5 +15,3 @@ $pfx = $db->prefix;
 if ($updateManager->isUpdate('0.1.0')){
     Abricos::GetModule('uniteller')->permission->Install();
 }
-
-?>

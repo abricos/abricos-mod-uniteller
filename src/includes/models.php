@@ -21,6 +21,3 @@ class UnitellerConfig extends AbricosModel {
     protected $_structModule = 'uniteller';
     protected $_structName = 'Config';
 }
-
-
-?>

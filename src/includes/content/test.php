@@ -37,6 +37,3 @@ $brick->content = Brick::ReplaceVarByData($brick->content, array(
     "status" => $status,
     "signature" => $signature
 ));
-
-
-?>
